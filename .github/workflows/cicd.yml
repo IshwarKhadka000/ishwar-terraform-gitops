@@ -52,16 +52,15 @@ jobs:
 
       - name: Get S3 Bucket Name
         id: get_bucket_name
-        run: echo "::set-output name=s3_bucket_name::$(terraform output -raw s3_bucket_name)"
-      
+        run: echo "S3_BUCKET_NAME=$(terraform output -raw s3_bucket_name)" >> $GITHUB_ENV
+
       - name: Sync dist folder to S3
-        run: |
-          aws s3 sync dist/ s3://${{ steps.get_bucket_name.outputs.s3_bucket_name }}/
+        run: aws s3 sync ./dist s3://${{ env.S3_BUCKET_NAME }} --delete
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-  
+          
       - name: Setup semver bash
         run: |
           sudo curl https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.0.0/src/semver -o /usr/local/bin/semver && sudo chmod +x /usr/local/bin/semver
