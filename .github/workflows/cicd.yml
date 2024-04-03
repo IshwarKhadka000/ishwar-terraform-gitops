@@ -84,6 +84,4 @@ jobs:
           ls -al
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "artifact_name=${ARTIFACT_NAME}" >> $GITHUB_OUTPUT
-        env:
-          SCOPE: ${{ env.package_name }}
-          RELEASE_VERSION: ${{ steps.get-version.outputs.new_version }}
+        
