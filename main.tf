@@ -4,12 +4,12 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "ishwar-gitops-tf-state-bucket"
-    key = "terraform.ishwar.tfstate"
-    region = "us-east-1"
+    bucket         = "ishwar-gitops-tf-state-bucket"
+    key            = "terraform.ishwar.tfstate"
+    region         = "us-east-1"
     dynamodb_table = "ishwar_tf_state"
-    encrypt = true
-  } 
+    encrypt        = true
+  }
 }
 
 
