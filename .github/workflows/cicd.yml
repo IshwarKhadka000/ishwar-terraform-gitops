@@ -85,9 +85,9 @@ jobs:
           BUILD_ID=$(echo $GITHUB_SHA | head -c7)
 
           if [[ ${{ github.event.pull_request.merged }} == 'true' ]]; then
-            VERSION=${SCOPE}@v${RELEASE_VERSION}
+            VERSION=${{ env.package_name }}@v${{ env.new_version }}
           else
-            VERSION=${SCOPE}@v${RELEASE_VERSION}+build.${BUILD_NUM}.${BUILD_ID}
+            VERSION=${{ env.package_name }}@v${{ env.new_version }}+build.${BUILD_NUM}.${BUILD_ID}
           fi
 
           ARTIFACT_NAME=${VERSION}.zip
