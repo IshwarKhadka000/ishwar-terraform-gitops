@@ -41,9 +41,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 
-  versioning:
-    runs-on: ubuntu-latest
-    steps:
+  
       - name: Setup semver bash
         run: |
           sudo curl https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.0.0/src/semver -o /usr/local/bin/semver && sudo chmod +x /usr/local/bin/semver
@@ -66,3 +64,26 @@ jobs:
           fi
 
           echo "new_version=$new_version" >> $GITHUB_OUTPUT
+
+
+      - name: Prepare artifact
+        id: prep
+        run: |
+          BUILD_NUM=$(echo $GITHUB_RUN_NUMBER)
+          BUILD_ID=$(echo $GITHUB_SHA | head -c7)
+
+          if [[ ${{ github.event.pull_request.merged }} == 'true' ]]; then
+            VERSION=${SCOPE}@v${RELEASE_VERSION}
+          else
+            VERSION=${SCOPE}@v${RELEASE_VERSION}+build.${BUILD_NUM}.${BUILD_ID}
+          fi
+
+          ARTIFACT_NAME=${VERSION}.zip
+          zip dist -r *.tf
+          mv dist.zip ${ARTIFACT_NAME}
+          ls -al
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "artifact_name=${ARTIFACT_NAME}" >> $GITHUB_OUTPUT
+        env:
+          SCOPE: ${{ env.package_name }}
+          RELEASE_VERSION: ${{ steps.get-version.outputs.new_version }}
