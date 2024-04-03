@@ -34,7 +34,7 @@ jobs:
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 
       - name: Terraform plan 
-        if: github.event_name == 'pull_request' || 
+        if: github.event_name == 'pull_request' 
         run: terraform plan
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
