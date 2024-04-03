@@ -79,22 +79,25 @@ jobs:
 
 
       - name: Prepare artifact
-        id: prep
         run: |
           BUILD_NUM=$(echo $GITHUB_RUN_NUMBER)
           BUILD_ID=$(echo $GITHUB_SHA | head -c7)
-
-          if [[ ${{ github.event.pull_request.merged }} == 'true' ]]; then
-            VERSION=${{ env.package_name }}@v${{ env.new_version }}
+    
+          # Assuming you want to check if this run is a result of a merged pull request
+          # Pass the condition from GitHub context to the shell script
+          PR_MERGED=${{ github.event.pull_request.merged == 'true' }}
+    
+          if [[ "$PR_MERGED" == "true" ]]; then
+            VERSION="${{ env.package_name }}@v${{ env.new_version }}"
           else
-            VERSION=${{ env.package_name }}@v${{ env.new_version }}+build.${BUILD_NUM}.${BUILD_ID}
+            VERSION="${{ env.package_name }}@v${{ env.new_version }}+build.${BUILD_NUM}.${BUILD_ID}"
           fi
-
-          ARTIFACT_NAME=${VERSION}.zip
-          zip dist -r *.tf
-          mv dist.zip ${ARTIFACT_NAME}
+    
+          ARTIFACT_NAME="${VERSION}.zip"
+          zip -r ${ARTIFACT_NAME} *.tf
+          mv ${ARTIFACT_NAME} dist.zip
           ls -al
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          echo "artifact_name=${ARTIFACT_NAME}" >> $GITHUB_OUTPUT
+          echo "version=${VERSION}" >> $GITHUB_ENV
+          echo "artifact_name=${ARTIFACT_NAME}" >> $GITHUB_ENV
 
       
