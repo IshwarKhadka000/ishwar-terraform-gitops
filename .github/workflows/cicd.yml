@@ -102,7 +102,7 @@ jobs:
 
 
       - name: Push Tag
-        if: github.event_name == 'pull_request' && github.ref == 'refs/heads/main' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.6
         with:
@@ -111,7 +111,7 @@ jobs:
           tag_prefix: ""
 
       - name: Create release
-        if: github.event_name == 'pull_request' && github.ref == 'refs/heads/main' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GH_TOKEN }}"
