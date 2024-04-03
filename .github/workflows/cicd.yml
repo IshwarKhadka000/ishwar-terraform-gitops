@@ -62,19 +62,20 @@ jobs:
         id: get-version
         run: |
           git fetch --tags
-          last_version=$(git tag --sort=-version:refname | grep -P "^$package_name@v\d+.\d+.\d+$" | head -n 1 | cut -d v -f 2)
+          package_name=${{ env.package_name }}
+          last_version=$(git tag --sort=-version:refname | grep -P "^$package_name@v\d+\.\d+\.\d+$" | head -n 1 | cut -d v -f 2)
+          branch_name=$(echo ${{ github.ref_name }} | awk '{print tolower($0)}')
 
           if [ -z "$last_version" ]; then
-            new_version=1.0.0
-          elif [[ ${{ github.head_ref }} =~ ^"major" ]]; then
+            new_version="1.0.0"
+          elif [[ "$branch_name" =~ ^major ]]; then
             new_version=$(semver bump major "$last_version")
-          elif [[ ${{ github.head_ref }} =~ ^"feat" ]]; then
+          elif [[ "$branch_name" =~ ^feat ]]; then
             new_version=$(semver bump minor "$last_version")
           else
             new_version=$(semver bump patch "$last_version")
           fi
-
-          echo "new_version=$new_version" >> $GITHUB_OUTPUT
+          echo "new_version=$new_version" >> $GITHUB_ENV
 
 
       - name: Prepare artifact
