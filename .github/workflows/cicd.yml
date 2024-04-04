@@ -4,8 +4,21 @@ env:
   package_name: terraform-gitops
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment
+        required: true
+        type: choice
+        options:
+          - 'dev'
+          - 'prod'
+
+  pull_request:
+    types: [synchronize, closed, opened]
+    branches:
+      - dev
+      - main
   
 
 jobs:
