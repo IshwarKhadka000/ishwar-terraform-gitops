@@ -52,9 +52,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 
-
-      
-
       - name: Sync dist folder to S3
         run: aws s3 sync ./dist s3://ishwar-frontend-bucket
         env:
@@ -85,7 +82,6 @@ jobs:
             new_version=$(semver bump patch "$last_version")
           fi
           echo "new_version=$new_version" >> $GITHUB_ENV
-
 
       - name: Prepare artifact
         id: prep
