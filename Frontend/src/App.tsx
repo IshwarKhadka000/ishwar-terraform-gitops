@@ -3,6 +3,10 @@ import './App.css';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.css';
 
+const backendUrl = `http://localhost:3001`;
+// const backendUrl = `http://54.159.25.92:3001`;
+// const backendUrl = `https://group1.api.gaurabupreti.tech`
+
 const App = () => {
   const [name, setName] = useState('');
   const [tasks, setTasks] = useState([]);
@@ -16,7 +20,7 @@ const App = () => {
 
   const LoadTasks = async () => {
     try {
-      const response = (await axios.get('http://localhost:4000/tasks/')).data;
+      const response = (await axios.get(`${backendUrl}/tasks/`)).data;
       setTasks(response.tasks);
     } catch (e) {
       console.log('Error:', e);
@@ -29,7 +33,7 @@ const App = () => {
 
   const deleteTask = async (taskId) => {
     try {
-      await axios.delete(`http://localhost:4000/tasks/${taskId}`);
+      await axios.delete(`${backendUrl}/tasks/${taskId}`);
       alert('Task deleted successfully!!!');
       LoadTasks();
     } catch (error) {
@@ -39,7 +43,7 @@ const App = () => {
 
   const markTaskCompleted = async (taskId, isCompleted) => {
     try {
-      await axios.put(`http://localhost:4000/tasks/${taskId}`, { is_completed: !isCompleted });
+      await axios.put(`${backendUrl}/tasks/${taskId}`, { is_completed: !isCompleted });
       alert(`Task marked as ${isCompleted ? 'incomplete' : 'completed'}!!!`);
       LoadTasks();
     } catch (error) {
@@ -59,7 +63,7 @@ const App = () => {
 
   const handleSubmitEdit = async (taskId) => {
     try {
-      await axios.put(`http://localhost:4000/tasks/${taskId}`, { name: name });
+      await axios.put(`${backendUrl}/tasks/${taskId}`, { name: name });
       alert('Task edited successfully!!!');
       setEditingTask(null);
       LoadTasks();
@@ -74,11 +78,11 @@ const App = () => {
 
     try {
       if (editingTask) {
-        await axios.put(`http://localhost:4000/tasks/${editingTask}`, { name: name });
+        await axios.put(`${backendUrl}/tasks/${editingTask}`, { name: name });
         alert('Task updated successfully!!!');
         setEditingTask(null);
       } else {
-        await axios.post('http://localhost:4000/tasks/', { name });
+        await axios.post(`${backendUrl}/tasks/`, { name });
         alert('New task added successfully!!!');
       }
       LoadTasks();
@@ -120,7 +124,7 @@ const App = () => {
             </tr>
           </thead>
           <tbody>
-            {tasks.map(task => (
+            {tasks && tasks.map(task => (
               <tr key={task.id}>
                 <td>{task.id}</td>
                 <td>{task.isCompleted ? (
