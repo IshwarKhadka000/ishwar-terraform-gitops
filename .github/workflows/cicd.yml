@@ -119,8 +119,8 @@ jobs:
           zip -r ${ARTIFACT_NAME} *.tf
           mv ${ARTIFACT_NAME} dist.zip
           ls -al
-          echo "version=${VERSION}" >> $GITHUB_ENV
-          echo "artifact_name=${ARTIFACT_NAME}" >> $GITHUB_ENV
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "artifact_name=${ARTIFACT_NAME}" >> $GITHUB_OUTPUT
       
       # Push Tag only on PR merge
       - name: Push Tag
