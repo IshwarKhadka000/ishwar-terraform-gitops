@@ -121,6 +121,7 @@ jobs:
           ls -al
           echo "version=${VERSION}" >> $GITHUB_ENV
           echo "artifact_name=${ARTIFACT_NAME}" >> $GITHUB_ENV
+      
       # Push Tag only on PR merge
       - name: Push Tag
         if: github.event.pull_request.merged
@@ -131,7 +132,7 @@ jobs:
           custom_tag: ${{ steps.prep.outputs.version }}
           tag_prefix: ""
 
-      # Create release only on PR merge
+            # Create release only on PR merge
       - name: Create release
         if: github.event.pull_request.merged
         uses: "marvinpinto/action-automatic-releases@latest"
