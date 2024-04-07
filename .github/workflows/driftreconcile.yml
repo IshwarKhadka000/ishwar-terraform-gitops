@@ -2,7 +2,7 @@ name: Terraform Drift Detect and Reconcile
 
 on:
   schedule:
-    - cron: '* * * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch:
     
 
